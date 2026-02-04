@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-students',
@@ -10,12 +11,18 @@ import { CommonModule } from '@angular/common';
 })
 export class StudentsComponent {
   students = [
-    { name: 'Juan Dela Cruz', course: 'BSIT', year: '3rd Year' },
-    { name: 'Maria Santos', course: 'BSCS', year: '2nd Year' },
-    { name: 'Pedro Reyes', course: 'BSIS', year: '4th Year' }
+    { name: 'Sandara Shayne', course: 'BSIT', year: '3rd Year' },
+    { name: 'Louisse', course: 'Nursing', year: '2nd Year' },
+    { name: 'Christlyn', course: 'BSBA', year: '4th Year' }
   ];
 
   deleteStudent(index: number) {
     this.students.splice(index, 1);
+  }
+
+  constructor(private router: Router) {}
+
+  goToCreateStudent() {
+    this.router.navigate(['/create-student']);
   }
 }
