@@ -1,1 +1,13 @@
-<router-outlet/>
+<header class="app-header">
+  <div class="container">
+    <h1>Student Registry</h1>
+    <nav>
+      <a routerLink="/students" class="nav-link">Students</a>
+      <a routerLink="/create-student" class="btn add-btn">Add Student</a>
+    </nav>
+  </div>
+</header>
+
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>

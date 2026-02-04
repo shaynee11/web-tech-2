@@ -1,0 +1,9 @@
+:host{display:block}
+
+.app-header{background:#2b8aef;color:#fff;padding:1rem 0}
+.app-header .container{max-width:1000px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;justify-content:space-between}
+.app-header h1{margin:0;font-size:1.25rem}
+.app-header nav .nav-link{color:#fff;margin-right:.75rem;text-decoration:none}
+.app-header nav .btn.add-btn{background:#fff;color:#2b8aef;border-radius:4px;padding:.4rem .7rem;text-decoration:none}
+
+.app-main{padding:1rem;background:#f5f7fb;min-height:calc(100vh - 70px)}
