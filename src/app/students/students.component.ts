@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, signal, inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { PLATFORM_ID } from '@angular/core';
+import { StudentsService } from '../../services/students/students.service';
+import { GetStudent } from '../../models/student.model';
 
 @Component({
   selector: 'app-students',
@@ -9,20 +12,45 @@ import { Router } from '@angular/router';
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.scss']
 })
-export class StudentsComponent {
-  students = [
-    { name: 'Sandara Shayne', course: 'BSIT', year: '3rd Year' },
-    { name: 'Louisse', course: 'Nursing', year: '2nd Year' },
-    { name: 'Christlyn', course: 'BSBA', year: '4th Year' }
-  ];
+export class StudentsComponent implements OnInit {
+  students = signal<GetStudent[]>([]);
+  private platformId = inject(PLATFORM_ID);
 
-  deleteStudent(index: number) {
-    this.students.splice(index, 1);
+  constructor(
+    private router: Router,
+    private studentsService: StudentsService
+  ) {}
+
+  ngOnInit(): void {
+    this.getStudents();
   }
 
-  constructor(private router: Router) {}
+  ngAfterViewInit(): void {
+    // If navigation passed a newly created student via state, append it to the list
+    if (isPlatformBrowser(this.platformId)) {
+      const newStudent = (history.state && history.state.newStudent) ? history.state.newStudent as GetStudent : null;
+      if (newStudent) {
+        this.students.update(list => [...list, newStudent]);
+      }
+    }
+  }
 
-  goToCreateStudent() {
+  async getStudents(): Promise<void> {
+    const studentsList = await this.studentsService.getStudents();
+    this.students.set(studentsList);
+  }
+
+  public async deleteStudent(studentId: string): Promise<void> {
+    try {
+      await this.studentsService.deleteStudent(studentId);
+      // After successful deletion, remove the student from the list
+      this.students.set(this.students().filter(student => student.id !== studentId));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  goToCreateStudent(): void {
     this.router.navigate(['/create-student']);
   }
 }
