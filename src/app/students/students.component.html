@@ -1,0 +1,63 @@
+<main class="students-container">
+  <header class="students-header">
+    <h1>Student Management</h1>
+    <button class="btn-add" (click)="navigateToCreate()">+ Add Student</button>
+  </header>
+
+  <div class="students-content">
+    <div *ngIf="loading" class="loading">
+      <p>Loading students...</p>
+    </div>
+
+    <div *ngIf="!loading && error" class="error-message">
+      <p>{{ error }}</p>
+      <button class="btn-retry" (click)="ngOnInit()">Retry</button>
+    </div>
+
+    <div *ngIf="!loading && !error && students.length === 0" class="empty-state">
+      <p>No students found.</p>
+      <button class="btn-add-empty" (click)="navigateToCreate()">Create First Student</button>
+    </div>
+
+    <div *ngIf="!loading && !error && students.length > 0" class="students-grid">
+      <article *ngFor="let student of students; trackBy: trackById" class="student-card" [attr.data-id]="student.id">
+        <div class="card-header">
+          <h2 class="student-name">{{ student.first_name }} {{ student.last_name }}</h2>
+          <span class="enrollment-badge" [ngClass]="'status-' + (student.enrollment_status | lowercase)">{{ student.enrollment_status }}</span>
+        </div>
+
+        <div class="card-body">
+          <p class="student-detail">
+            <span class="label">Email:</span>
+            <span class="value">{{ student.email }}</span>
+          </p>
+          <p class="student-detail">
+            <span class="label">Course:</span>
+            <span class="value">{{ student.course }}</span>
+          </p>
+          <p class="student-detail">
+            <span class="label">Year Level:</span>
+            <span class="value">Year {{ student.year_level }}</span>
+          </p>
+          <p class="student-detail">
+            <span class="label">Age:</span>
+            <span class="value">{{ student.age }}</span>
+          </p>
+          <p class="student-detail">
+            <span class="label">GPA:</span>
+            <span class="value">{{ student.gpa }}</span>
+          </p>
+        </div>
+
+        <div class="card-footer">
+          <button
+            class="btn-delete"
+            (click)="deleteStudent(student.id)"
+            [disabled]="deletingId === student.id">
+            {{ deletingId === student.id ? 'Deleting...' : 'Delete' }}
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
